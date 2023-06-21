@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: ${API_LOCATION_MAME}
+  description: ${API_LOCATION_DESCRIPTION}
+spec:
+  targets:
+    ./api/example.yaml

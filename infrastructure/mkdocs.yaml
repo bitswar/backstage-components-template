@@ -1,0 +1,6 @@
+site_name: 'Example documentation'
+nav:
+  - Home: index.md
+plugins:
+  - techdocs-core
+  - plantuml-colocator

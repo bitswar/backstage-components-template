@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1aplha1
+kind: Location
+metadata:
+  name:  ${MAIN_NAME}
+  description: ${MAIN_DESCRIPTION}
+spec:
+  targets:
+    - ./apis.yaml
+    - ./components.yaml
+    - ./systems.yaml
