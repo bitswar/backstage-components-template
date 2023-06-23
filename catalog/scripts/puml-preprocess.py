@@ -2,18 +2,50 @@ import os
 import pickle
 import sys
 
-src_dir = 'docs'
-utils_dir = 'docs/diagrams/utils'
 extensions = ['.puml']
+
+
+class Env:
+    include_folders: list[str]
+    src_folder: str
+
+    env_folder_pattern = 'PUML_INCLUDE_DIR'
+    env_src_dir = 'PUML_ROOT_DIR'
+
+    def __init__(self) -> None:
+        self.include_folders = self.__load_envs()
+
+    def __trim_path(self, path: str) -> str:
+        if path[-1] == '/':
+            path = path[:-1]
+        if path[0] == '/':
+            path = path[1:]
+        return path
+
+    def __load_envs(self) -> list[str]:
+        envs = []
+        with open('.env', 'r') as file:
+            envs = file.read().split('\n')
+
+        folders = []
+        for line in envs:
+            path = line.split('=')[-1]
+            if not line.find(self.env_folder_pattern) == -1:
+                folders.append(self.__trim_path(path))
+            if not line.find(self.env_src_dir) == -1:
+                self.src_folder = self.__trim_path(path)
+
+        return folders
 
 
 class Processer:
     dump_file_name = 'dump.pkl'
+    env = Env()
 
     def preprocess(self):
-        diagrams = self.__get_all_diagram_files(src_dir)
+        diagrams = self.__get_all_diagram_files(self.env.env_src_dir)
         utils = {}
-        for folder in Env().include_folders:
+        for folder in self.env.include_folders:
             utils.update(self.__get_all_diagram_files(folder))
 
         for u in utils.keys():
@@ -88,31 +120,6 @@ class FileData:
         self.content = content
         self.filename = filename
         self.path = path
-
-
-class Env:
-    include_folders: list[str]
-
-    env_folder_pattern = 'PUML_INCLUDE_DIR'
-
-    def __init__(self) -> None:
-        self.include_folders = self.__load_envs()
-
-    def __load_envs(self) -> list[str]:
-        envs = []
-        with open('.env', 'r') as file:
-            envs = file.read().split('\n')
-
-        folders = []
-        for line in envs:
-            if not line.find(self.env_folder_pattern) == -1:
-                path = line.split('=')[-1]
-                if path[-1] == '/':
-                    path = path[:-1]
-                if path[0] == '/':
-                    path = path[1:]
-                folders.append(path)
-        return folders
 
 
 if __name__ == '__main__':
