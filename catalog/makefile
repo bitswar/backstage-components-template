@@ -1,29 +1,33 @@
 include .env
 --preprocess:
-	@python scripts/puml-preprocess.py
+	@python3 scripts/puml-preprocess.py process
+
+--restore:
+	@python3 scripts/puml-preprocess.py restore
+	@rm dump.pkl
 
 .PHONY: generate
-generate: --preprocess
-ifneq ($(origin src), undefined)
-ifneq ($(origin out), undefined)
-	@npx @techdocs/cli generate --source-dir $(src) --output-dir $(out) --no-docker
-else
-	@npx @techdocs/cli generate --source-dir $(src) --output-dir $(DEFAULT_OUT_DIR) --no-docker
-endif
-else
-ifeq ($(origin default), true)
+generate:
+ifneq ($(origin DEFAULT_SRC_DIR), undefined)
+ifneq ($(origin DEFAULT_OUT_DIR), undefined)
+	@echo "DEFAULT"
+	@make -- --preprocess
 	@npx @techdocs/cli generate --source-dir $(DEFAULT_SRC_DIR) --output-dir $(DEFAULT_OUT_DIR) --no-docker
 else
-	@echo "Command usage: make generate [out=path-to-output-dir] [src=path-to-src-dir] [default=true]"
+	@make -- --generate-error
+endif
+else
+	@make -- --generate-error
+endif
+
+--generate-error:
+	@echo "Command usage: make generate"
 	@echo ""
-	@echo "You can specify default=true value to skip \"out\" and \"src\" args"
+	@echo "You need to specify in .env file arguments"
 	@echo "DEFAULT_SRC_DIR = ."
 	@echo "DEFAULT_OUT_DIR = ./site"
 	@echo "This means that docs will be builded from root folder into ./site"
 	@echo ""
-	@echo "In another way you should specify both arguments"
-endif
-endif
 
 publish:
 	@export AWS_ACCESS_KEY_ID=$(S3_ACCESS_KEY_ID) && \
