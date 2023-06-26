@@ -5,4 +5,4 @@ metadata:
   description: ${API_LOCATION_DESCRIPTION}
 spec:
   targets:
-    ./api/example.yaml
+    - ./api/example.yaml

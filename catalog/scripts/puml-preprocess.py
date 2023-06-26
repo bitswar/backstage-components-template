@@ -96,12 +96,15 @@ class Processer:
 
     def __load_dumped(self) -> list['FileData']:
         loaded = []
-        with open(self.dump_file_name, 'rb') as file:
-            try:
-                object = pickle.load(file)
-                loaded.append(object)
-            except Exception:
-                pass
+        try:
+            with open(self.dump_file_name, 'rb') as file:
+                try:
+                    object = pickle.load(file)
+                    loaded.append(object)
+                except Exception:
+                    pass
+        except FileNotFoundError:
+            pass
         return loaded
 
     def restore(self) -> None:

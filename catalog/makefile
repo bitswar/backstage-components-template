@@ -4,7 +4,7 @@ include .env
 
 --restore:
 	@python3 scripts/puml-preprocess.py restore
-	@rm dump.pkl
+	@rm dump.pkl 2> /dev/null || echo
 
 .PHONY: generate
 generate:
@@ -13,6 +13,7 @@ ifneq ($(origin DEFAULT_OUT_DIR), undefined)
 	@echo "DEFAULT"
 	@make -- --preprocess
 	@npx @techdocs/cli generate --source-dir $(DEFAULT_SRC_DIR) --output-dir $(DEFAULT_OUT_DIR) --no-docker
+	@make -- --restore
 else
 	@make -- --generate-error
 endif

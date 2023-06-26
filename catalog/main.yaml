@@ -7,4 +7,3 @@ spec:
   targets:
     - ./apis.yaml
     - ./components.yaml
-    - ./systems.yaml
