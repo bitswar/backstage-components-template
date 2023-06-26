@@ -6,4 +6,3 @@ metadata:
 spec:
   targets:
     - ./apis.yaml
-    - ./components.yaml

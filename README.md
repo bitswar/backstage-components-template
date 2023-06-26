@@ -29,7 +29,6 @@ metadata:
 spec:
   targets:
     - ./apis.yaml # Delete this line
-    - ./components.yaml
 ```
 
 After these steps you won't provide APIs documentation into `Backstage`
@@ -106,7 +105,7 @@ DEFAULT_SRC_DIR=.
 DEFAULT_OUT_DIR=./site
 
 # Backstage entity description
-BACKSTAGE_ENTITY=default/Components/Documentation
+BACKSTAGE_ENTITY=default/Component/Documentation
 ```
 
 ### PlantUML generation
