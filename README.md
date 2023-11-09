@@ -141,3 +141,20 @@ To publish doumentation run the command:
 make publish
 ```
 It will get all environment from `.env` file and try to publish documentation to bucket that you specified
+
+### Publish with Docker image
+To publish documentation without installing dependencies can be used simple docker image
+that already has all of them. Only docker daemon is required.
+
+To generate & publish documentation should be called following command:
+```bash
+$ docker run --env-file [path-to-env-file] -v [path-to-folder-with-docs]:/docs danysmall/mkdocs-scaffold:latest
+```
+
+As an example if we're running this command from `catalog` page where our documentation is locaded (*.yaml files, mkdocs.yaml and others) we can use it like:
+
+```bash
+$ docker run --env-file .env .:/docs danysmall/mkdocs-scaffold:latest
+```
+
+and it's gonna build and push all documentation without touching original one
