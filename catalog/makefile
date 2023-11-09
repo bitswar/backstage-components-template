@@ -12,7 +12,7 @@ ifneq ($(origin DEFAULT_SRC_DIR), undefined)
 ifneq ($(origin DEFAULT_OUT_DIR), undefined)
 	@echo "DEFAULT"
 	@make -- --preprocess
-	@npx @techdocs/cli generate --source-dir $(DEFAULT_SRC_DIR) --output-dir $(DEFAULT_OUT_DIR) --no-docker
+	@npx @techdocs/cli generate --source-dir $(DEFAULT_SRC_DIR) --output-dir $(DEFAULT_OUT_DIR) --no-docker || echo - && make -- --restore
 	@make -- --restore
 else
 	@make -- --generate-error
