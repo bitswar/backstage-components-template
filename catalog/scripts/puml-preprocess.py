@@ -17,18 +17,25 @@ class Env:
         env_dict = self.__get_env_dict()
 
         self.include_folders = self.__get_env_from_dict(
-            env_dict, 'PUML_INCLUDE_DIR'
+            env_dict,
+            "PUML_INCLUDE_DIR",
         )
 
         self.env_src_dir = self.__get_env_from_dict(
-            env_dict, 'PUML_ROOT_DIR'
+            env_dict,
+            "PUML_ROOT_DIR",
+        )
+
+        self.src_folder = self.__get_env_from_dict(
+            env_dict,
+            "DEFAULT_SRC_DIR",
         )
 
     def __get_env_from_dict(self, envs: dict[str, str], key: str) -> str:
         try:
             return envs[key]
         except KeyError:
-            raise KeyError(f'Environment variable {key} not found')
+            raise KeyError(f"Environment variable {key} not found")
 
     def __get_env_dict(self) -> dict[str, str]:
         envs = self.__get_dirty_env_dict()
@@ -38,27 +45,27 @@ class Env:
 
     def __get_dirty_env_dict(self) -> dict[str, str]:
         envs = {}
-        with open('.env', 'r') as file:
-            for line in file.read().split('\n'):
-                splitted_line = line.split('=')
+        with open(".env", "r") as file:
+            for line in file.read().split("\n"):
+                splitted_line = line.split("=")
                 if len(splitted_line) < 2 or len(splitted_line) > 2:
                     continue
 
                 key, value = splitted_line
-                if not key == '' and not value == '':
+                if not key == "" and not value == "":
                     envs[key] = value
 
         return envs
 
     def __sanitize_path(self, path: str) -> str:
-        path = path.replace('\\', '/')
-        path = path.replace('//', '/')
-        if path[-1] == '/':
+        path = path.replace("\\", "/")
+        path = path.replace("//", "/")
+        if path[-1] == "/":
             path = path[:-1]
         return path
 
     def __str__(self) -> str:
-        return f'Env: {self.include_folders}, {self.env_src_dir}'
+        return f"Env: {self.include_folders}, {self.env_src_dir}"
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -73,13 +80,12 @@ class Processer:
 
         for path in diagrams:
             self.__dump_sources(path)
-            print('Dumped: ', path)
+            print("Dumped: ", path)
 
             self.__preprocess_file(path, utils)
-            print('Pre-processed: ', path)
+            print("Pre-processed: ", path)
 
-    def __get_diagrams_dict_and_utils(self) -> \
-            tuple[dict[str, str], dict[str, str]]:
+    def __get_diagrams_dict_and_utils(self) -> tuple[dict[str, str], dict[str, str]]:
         diagrams = self.__get_all_diagram_files(self.env.src_folder)
         utils = {}
         for folder in self.env.include_folders:
@@ -137,7 +143,7 @@ class Processer:
                     object = pickle.load(file)
                     loaded.append(object)
         except FileNotFoundError:
-            print('File not found')
+            print("File not found")
         return loaded
 
     def restore(self) -> None:
@@ -145,7 +151,7 @@ class Processer:
         for file in files:
             with open(file.path, "w") as dest:
                 dest.write(file.content)
-                print('Restored: ', file.path)
+                print("Restored: ", file.path)
 
 
 class FileData:
