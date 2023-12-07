@@ -154,7 +154,7 @@ $ docker run --env-file [path-to-env-file] -v [path-to-folder-with-docs]:/docs d
 As an example if we're running this command from `catalog` page where our documentation is locaded (*.yaml files, mkdocs.yaml and others) we can use it like:
 
 ```bash
-$ docker run --env-file .env .:/docs danysmall/mkdocs-scaffold:latest
+$ docker run --env-file .env -v .:/docs danysmall/mkdocs-scaffold:latest
 ```
 
 and it's gonna build and push all documentation without touching original one
